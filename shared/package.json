@@ -1,0 +1,25 @@
+{
+  "name": "eppley-shared",
+  "version": "1.0.0",
+  "description": "Types and zod schemas shared between client and server",
+  "type": "module",
+  "scripts": {
+    "build": "tsc",
+    "watch": "tsc -w",
+    "typecheck": "tsc --noEmit",
+    "clean": "node scripts/clean.ts"
+  },
+  "dependencies": {
+    "zod": "^4.4.3"
+  },
+  "exports": {
+    ".": {
+      "types": "./build/schemas/index.d.ts",
+      "default": "./build/schemas/index.js"
+    },
+    "./schemas/*": {
+      "types": "./build/schemas/*.schemas.d.ts",
+      "default": "./build/schemas/*.schemas.js"
+    }
+  }
+}
