@@ -4,22 +4,22 @@
   "description": "Types and zod schemas shared between client and server",
   "type": "module",
   "scripts": {
-    "build": "tsc",
+    "build": "tsc --build",
     "watch": "tsc -w",
     "typecheck": "tsc --noEmit",
     "clean": "node scripts/clean.ts"
   },
   "dependencies": {
-    "zod": "^4.4.3"
+    "zod": "^4.6.5"
   },
   "exports": {
-    ".": {
-      "types": "./build/schemas/index.d.ts",
-      "default": "./build/schemas/index.js"
+    "./api": {
+      "types": "./dist/api.types.d.ts",
+      "default": "./dist/api.types.js"
     },
     "./schemas/*": {
-      "types": "./build/schemas/*.schemas.d.ts",
-      "default": "./build/schemas/*.schemas.js"
+      "types": "./dist/schemas/*.schemas.d.ts",
+      "default": "./dist/schemas/*.schemas.js"
     }
   }
 }

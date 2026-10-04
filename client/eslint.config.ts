@@ -13,13 +13,18 @@ export default defineConfig([
     extends: [
       js.configs.recommended,
       tseslint.configs.recommended,
+      tseslint.configs.stylisticTypeChecked,
       reactHooks.configs.flat['recommended-latest'],
       reactRefresh.configs.vite,
       eslintConfigPrettier,
     ],
     languageOptions: {
-      ecmaVersion: 2023,
+      ecmaVersion: 6,
       globals: globals.browser,
+      parserOptions: {
+        projectService: true,
+        tsconfigRootDir: import.meta.dirname
+      }
     },
   },
 ])

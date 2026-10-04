@@ -10,7 +10,7 @@ export default defineConfig({
       // Forward API calls to the Express server in dev so the client
       // can use relative paths like fetch('/api/courts').
       '/api': {
-        target: 'http://localhost:4000',
+        target: process.env.VITE_API_URL ?? 'http://localhost:4000',
         changeOrigin: true,
       },
     },

@@ -1,3 +1,8 @@
+/*
+  Where global styles are applied, and also where CSS variables are stored
+  Currently this is just leftovers from the Vite template
+*/
+
 :root {
   --text: #6b6375;
   --text-h: #08060d;

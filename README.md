@@ -1,35 +1,35 @@
 # Eppley Court Monitor
 
-A free, live web app that shows whether the pickleball and badminton courts at the Eppley Recreation Center (University of Maryland) are open or taken, so you can check before you make the trip.
+A free, live web app that shows whether the tennis and pickleball courts at the Eppley Recreation Center (University of Maryland) are open or taken, so you can check before you make the trip.
 
 Built by [Open Sourcery @ UMD](https://opensourcery.umd.edu/).
 
-> **Status:** 🚧 Early planning / pre-alpha. Nothing here is deployed yet. This README describes the plan, and sections will change as we learn what's feasible.
+> **Status:** 🚧 Early planning / pre-alpha, nothing is currently deployed. This README describes the plan, and sections may change as we learn what's feasible.
 
 ---
 
 ## Why this exists
 
-Walking over to Eppley just to find every court occupied is a waste of time. This project aims to be a free public service for the UMD community: one page that tells you, right now, which courts are in use.
+Walking over to Eppley just to find every court occupied is a waste of time. This project aims to be a free public service for the UMD community: one page that tells you *right now* which courts are in use.
 
 ## Goals
 
-- Show real-time (or near-real-time) court status for **pickleball** and **badminton** courts
+- Show real-time (or near-real-time) court status for **tennis** and **pickleball** courts
 - Stay free, open source, and accessible to any UMD student, staff member, or visitor
 - Work well on mobile, since that's where people will check it
 - Be honest about data quality by showing *how* a status was determined and *how fresh* it is
 - Respect privacy and Eppley's policies (see [Privacy and ethics](#privacy-and-ethics))
 
-**Possible later scope:** tennis and racquetball courts, historical "busy times" charts, and notifications when a court opens up.
+**Possible later scope:** historical "busy times" charts, and notifications when a court opens up.
 
 ## How we plan to detect court status
 
-We don't yet know which approach (or combination) will be reliable, so the project is structured around multiple data sources feeding one status model. The order below is roughly cheapest to most involved.
+We are still analyzing which combination will be reliable, so the project is structured around multiple data sources feeding one status model. The order below is roughly cheapest to most involved.
 
 | Method | Description | Status |
 | --- | --- | --- |
 | **Reservation scraping** | Scrape Eppley's public reservation/schedule data to show booked vs. unbooked slots | Planned |
-| **Google "busy hours"** | Use Google's popular-times / busy-hours data as a rough occupancy signal | Investigating |
+| **Google "busy hours"** | Use Google's popular-times / busy-hours data as a rough occupancy signal | Probably not / Hard |
 | **Webcam feed** | A camera on the courts, either displayed directly or analyzed with computer vision to detect players | Idea |
 | **On-court sensor device** | A weatherproof embedded device (e.g. Arduino-based, possibly solar powered) mounted to the court fence | Idea |
 
@@ -47,12 +47,12 @@ Reservations only tell us what's *booked*, not what's actually *in use* (walk-on
 ### Planned architecture
 
 ```
- ┌────────────────────┐   ┌─────────────────────┐   ┌──────────────────────┐
- │ Data sources       │   │ Express server      │   │ Supabase             │
- │  • Eppley scraper  │──>│  • ingestion jobs   │──>│  • Postgres          │
- │  • Google busy hrs │   │  • status logic     │   │  • Realtime          │
- │  • (future) camera │   │  • REST API         │   └──────────┬───────────┘
- │  • (future) sensor │   └─────────────────────┘              │
+ ┌────────────────────┐   ┌──────────────────────┐   ┌─────────────────────┐
+ │ Data sources       │   │ Supabase             │   │ Express server      │
+ │  • Eppley scraper  │──>│  • Postgres          │──>│  • ingestion jobs   │
+ │  • Google busy hrs │   │  • Realtime          │   │  • status logic     │
+ │  • (future) camera │   └──────────────────────┘   │  • REST API         │
+ │  • (future) sensor │                              └─────────┬───────────┘
  └────────────────────┘                                        v
                                                     ┌──────────────────────┐
                                                     │ Vite + React client  │
@@ -66,6 +66,10 @@ This is a starting point, not a commitment. Open an issue if you think something
 
 > The repo is still being scaffolded, so treat the commands below as the intended workflow and update them as the project takes shape.
 
+### Frontend Design
+
+https://www.figma.com/proto/yLbU1bDMoiQRp5nsdMpXpW/ECF-wireframe?node-id=3-8&p=f&t=fLdrPfdkWI4wC276-1&scaling=scale-down&content-scaling=fixed&page-id=0%3A1&starting-point-node-id=3%3A8
+
 ### Prerequisites
 
 - [Node.js](https://nodejs.org/) (LTS)
@@ -76,42 +80,25 @@ This is a starting point, not a commitment. Open an issue if you think something
 
 ```bash
 # 1. Clone the repo
-git clone https://github.com/<org-or-user>/eppley-court-monitor.git
+git clone https://github.com/Open-Sourcery-UMD/eppley-court-monitor.git
 cd eppley-court-monitor
 
 # 2. Install dependencies
-cd client && npm install
-cd ../server && npm install
+npm install
 
 # 3. Configure environment variables
 cp server/.env.example server/.env
 cp client/.env.example client/.env
 # then fill in the values (see below)
 
-# 4. Run the dev servers (in separate terminals)
-cd server && npm run dev
-cd client && npm run dev
+# 4. Watch the shared/ directory for changes
+npm run watch -w shared
+
+# 5. Run the dev servers in another console
+npm run dev
 ```
 
 ### Environment variables
-
-Names are provisional.
-
-**`server/.env`**
-
-```
-PORT=3001
-SUPABASE_URL=
-SUPABASE_SERVICE_ROLE_KEY=
-```
-
-**`client/.env`**
-
-```
-VITE_API_URL=http://localhost:3001
-VITE_SUPABASE_URL=
-VITE_SUPABASE_ANON_KEY=
-```
 
 > ⚠️ Never commit `.env` files or the Supabase **service role** key. That key must only ever live on the server.
 
@@ -122,6 +109,8 @@ eppley-court-monitor/
 ├── client/          # Vite + React app
 │   └── src/
 ├── server/          # Express API, scrapers, ingestion jobs
+│   └── src/
+├── shared/          # Cross-stack shared types and validation schemas
 │   └── src/
 └── README.md
 ```
@@ -135,7 +124,7 @@ eppley-court-monitor/
 - [ ] **Evaluate Google busy hours** as an additional signal
 - [ ] **Prototype on-site detection:** webcam + computer vision and/or fence-mounted sensor
 - [ ] **Launch** to the UMD community
-- [ ] **Stretch:** historical busy-time trends, notifications, tennis/racquetball support
+- [ ] **Stretch:** historical busy-time trends, notifications, tennis/pickleball support
 
 ## Privacy and ethics
 

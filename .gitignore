@@ -10,7 +10,9 @@ lerna-debug.log*
 node_modules
 dist
 dist-ssr
+build
 *.local
+*.tsbuildinfo
 
 # local env files — real secrets (DB URIs, JWT secrets, SMTP passwords) live
 # in these; never commit them. See backend/.env.example / frontend/.env.example

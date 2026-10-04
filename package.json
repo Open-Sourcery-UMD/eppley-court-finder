@@ -21,5 +21,8 @@
   },
   "overrides": {
     "zod": "^4.4.3"
+  },
+  "dependencies": {
+    "eppley-shared": "^1.0.0"
   }
 }
