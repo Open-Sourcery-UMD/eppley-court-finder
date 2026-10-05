@@ -2,13 +2,92 @@
  * Unit tests for courts.schemas.ts
  */
 
+// TODO: Make the actual tests
+
 import "vitest"
 
+// Mocked sensors
+
+// Tennis/Pickleball
+
+/** Sensor on [T]ennis court [2], [N]orth side */
+const sensorT2N = {
+  peopleDetected: true, // From IR sensor or manual button, etc.
+  lastUpdated: "2026-10-03T00:23:54",
+  pickleballNetStatus: "locked" // From camera, probably?
+}
+
+/** Sensor on [T]ennis court [2], [S]outh side */
+const sensorT2S = {
+  peopleDetected: false,
+  lastUpdated: "2026-10-03T01:06:20",
+  pickleballNetStatus: "unlocked"
+}
+
+/** Sensor on [T]ennis court [3], [N]orth side */
+const sensorT3N = {
+  peopleDetected: true, // Court is being used for tennis
+  lastUpdated: "2026-10-03T01:07:45",
+  pickleballNetStatus: "locked" // Both sub-courts locked (tennis-only court)
+}
+
+/** Sensor on [T]ennis court [3], [S]outh side */
+const sensorT3S = {
+  peopleDetected: true, // Court is being used for tennis
+  lastUpdated: "2026-10-03T01:07:45",
+  pickleballNetStatus: "locked"
+}
+
+// Badminton
+
+/** Sensor on [B]adminton court [3] */
+const sensorB3 = {
+  peopleDetected: false,
+  lastUpdated: "2026-10-03T01:01:51"
+  // No `pickleballNetStatus` as it's not a tennis court
+}
+
+/** Sensor on [B]adminton court [4] */
+const sensorB4 = {
+  peopleDetected: true,
+  lastUpdated: "2026-10-03T01:05:00"
+}
+
+// Racquetball
+
+/** Sensor on [R]acquetball court [2] */
+const sensorR2 = {
+  peopleDetected: true,
+  lastUpdated: "2026-10-03T00:00:15"
+}
+
+/** Sensor on [R]acquetball court [3] */
+const sensorR3 = {
+  peopleDetected: true,
+  lastUpdated: "2026-10-03T01:05:00",
+}
+
+/** Sensor on [R]acquetball court [6] */
+const sensorR6 = {
+  peopleDetected: false, // Court is available per database
+  lastUpdated: "2026-10-03T22:45:01",
+}
+
+/** Sensor on [R]acquetball court [7] */
+const sensorR7 = {
+  peopleDetected: false, // Court is available per database
+  lastUpdated: "2026-10-03T20:34:23",
+}
+
+// Mocked database
+
 /**
- * All dates in ISO (e.g. `new Date().toISOString()`)
+ * The resultant database from getting data from all sensors
+ * 
+ * All dates should be in ISO format (e.g. `new Date().toISOString()`)
  * Not all courts (court ids) are entered bc am lazy
  */
-export const mockCourtsDatabase = {
+const mockCourtsDatabase = {
   tennis: [
     {
       // 2nd tennis court

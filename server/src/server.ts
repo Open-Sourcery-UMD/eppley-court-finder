@@ -3,8 +3,7 @@ import express from "express"
 import type { Request, Response } from "express"
 import * as environment from "./config/environment.js"
 import { errorHandler } from "./common/middleware/errorHandler.js"
-import courtRoutes from "./features/courts/courts.routes.js"
-import { ResponseBuilder } from "./types/api.types.js"
+import sensorsRoutes from "./features/sensors/sensors.routes.js"
 
 const app = express();
 
@@ -13,18 +12,18 @@ app.use(cors());
 app.use(express.json());
 
 // Public routes
-app.use("/api/courts", courtRoutes);
+app.use("/api/sensors", sensorsRoutes);
 
 // Health check
 app.get("/", (req: Request, res: Response) => {
-  res.send("Eppley Court Finder API is running");
+  res.send("Eppley Court Finder Backend is running");
 });
 
 // Error handler
 app.use(errorHandler);
 
 // Start server
-const host = environment.listenHost;
+const host = environment.host;
 const port = environment.PORT;
 
 app.listen(port, host, () => {

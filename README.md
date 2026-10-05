@@ -44,27 +44,11 @@ Reservations only tell us what's *booked*, not what's actually *in use* (walk-on
 | Backend | [Node.js](https://nodejs.org/) + [Express](https://expressjs.com/) |
 | Database / realtime | [Supabase](https://supabase.com/) (Postgres + Realtime) |
 
-### Planned architecture
-
-```
- ┌────────────────────┐   ┌──────────────────────┐   ┌─────────────────────┐
- │ Data sources       │   │ Supabase             │   │ Express server      │
- │  • Eppley scraper  │──>│  • Postgres          │──>│  • ingestion jobs   │
- │  • Google busy hrs │   │  • Realtime          │   │  • status logic     │
- │  • (future) camera │   └──────────────────────┘   │  • REST API         │
- │  • (future) sensor │                              └─────────┬───────────┘
- └────────────────────┘                                        v
-                                                    ┌──────────────────────┐
-                                                    │ Vite + React client  │
-                                                    │  (TanStack Query)    │
-                                                    └──────────────────────┘
-```
-
-This is a starting point, not a commitment. Open an issue if you think something should be done differently.
-
 ## Getting started
 
 > The repo is still being scaffolded, so treat the commands below as the intended workflow and update them as the project takes shape.
+
+See the [Google doc](https://docs.google.com/document/d/1kMYtlmLTnGKQ24fTcUZYvjmb2xJiQnConNdW_QWGVs0/edit?tab=t.0) for more details.
 
 ### Frontend Design
 
