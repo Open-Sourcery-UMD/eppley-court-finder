@@ -29,3 +29,5 @@ const port = environment.PORT;
 app.listen(port, host, () => {
   console.log(`Server running on http://${host}:${port}`);
 });
+
+export default app;

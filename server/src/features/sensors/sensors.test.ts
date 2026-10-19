@@ -4,7 +4,9 @@
 
 // TODO: Make the actual tests
 
-import "vitest"
+import { describe, it, expect } from "vitest"
+import request from "supertest"
+import app from "../../server.js"
 
 // Mocked sensors
 
@@ -12,6 +14,8 @@ import "vitest"
 
 /** Sensor on [T]ennis court [2], [N]orth side */
 const sensorT2N = {
+  type: "Tennis",
+  id: 2,
   peopleDetected: true, // From IR sensor or manual button, etc.
   lastUpdated: "2026-10-03T00:23:54",
   pickleballNetStatus: "locked" // From camera, probably?
@@ -37,6 +41,41 @@ const sensorT3S = {
   lastUpdated: "2026-10-03T01:07:45",
   pickleballNetStatus: "locked"
 }
+
+describe('Tennis sensor tests', () => {
+
+  // Test POST /api/sensors/tennis
+  it('should return null with a 200 status', async () => {
+    const response = await request(app)
+      .post('/api/sensors/tennis')
+      .send(sensorT2N);
+
+    expect(response.status).toBe(200);
+    expect(response.body).toBe({ success: true, data: null });
+  });
+
+  // Test POST /api/users (Validation error case)
+  it('should return a 400 status if lastUpdated is not in ISO format', async () => {
+    const response = await request(app)
+      .post('/api/sensors/tennis')
+      .send({
+        peopleDetected: true,
+        lastUpdated: "2026/10/02 12:23:54 AM", // bad format
+        pickleballNetStatus: "locked"
+      });
+
+    expect(response.status).toBe(400);
+    console.warn(response.body)
+    expect(response.body).toStrictEqual({
+      success: false,
+      error: {
+        code: "INVALID_INPUT",
+        message: "Invalid format"
+      }
+    });
+  });
+
+});
 
 // Badminton
 

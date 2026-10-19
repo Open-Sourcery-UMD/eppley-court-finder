@@ -12,18 +12,17 @@ import type {
   RacquetballSensorSchema,
   BadmintonSensorSchema
 } from "eppley-shared/schemas/sensors"
+import { ApiErrorCode } from "eppley-shared/api";
 
 export const postTennisCourts = asyncHandler(async (req: Request, res: Response) => {
   // update active courts, tennis courts, badminton courts
-  res.json(ResponseBuilder.success(null));
+  console.log("recieved POST to api/sensors/tennis");
+  // res.status(200).json(ResponseBuilder.success(null));
+  res.status(400).json(ResponseBuilder.error(ApiErrorCode.INVALID_INPUT, "Invalid format"));
 });
 
 export const postBadmintonCourts = asyncHandler(async (req: Request, res: Response) => {
   // update active courts, badminton courts
-  res.json(ResponseBuilder.success(null));
-});
-
-export const postRacquetballCourts = asyncHandler(async (req: Request, res: Response) => {
-  // update active courts, racquetball courts
+  console.log("recieved POST to api/sensors/badminton");
   res.json(ResponseBuilder.success(null));
 });
