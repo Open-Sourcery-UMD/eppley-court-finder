@@ -10,7 +10,7 @@ export const TennisSensorSchema = z.object({
   id: z.number(),
   peopleDetected: z.boolean(),
   lastUpdated: z.iso.datetime(),
-  pickleballNetStatus: z.regex(/(un)?locked/)
+  pickleballNetStatus: z.stringFormat("locked-status", /(un)?locked/)
 });
 
 export type TennisSensorSchema = z.infer<typeof TennisSensorSchema>;

@@ -17,28 +17,28 @@ const sensorT2N = {
   type: "Tennis",
   id: 2,
   peopleDetected: true, // From IR sensor or manual button, etc.
-  lastUpdated: "2026-10-03T00:23:54",
+  lastUpdated: "2026-10-03T00:23:54Z",
   pickleballNetStatus: "locked" // From camera, probably?
 }
 
 /** Sensor on [T]ennis court [2], [S]outh side */
 const sensorT2S = {
   peopleDetected: false,
-  lastUpdated: "2026-10-03T01:06:20",
+  lastUpdated: "2026-10-03T01:06:20Z",
   pickleballNetStatus: "unlocked"
 }
 
 /** Sensor on [T]ennis court [3], [N]orth side */
 const sensorT3N = {
   peopleDetected: true, // Court is being used for tennis
-  lastUpdated: "2026-10-03T01:07:45",
+  lastUpdated: "2026-10-03T01:07:45Z",
   pickleballNetStatus: "locked" // Both sub-courts locked (tennis-only court)
 }
 
 /** Sensor on [T]ennis court [3], [S]outh side */
 const sensorT3S = {
   peopleDetected: true, // Court is being used for tennis
-  lastUpdated: "2026-10-03T01:07:45",
+  lastUpdated: "2026-10-03T01:07:45Z",
   pickleballNetStatus: "locked"
 }
 
@@ -51,7 +51,7 @@ describe('Tennis sensor tests', () => {
       .send(sensorT2N);
 
     expect(response.status).toBe(200);
-    expect(response.body).toBe({ success: true, data: null });
+    expect(response.body).toStrictEqual({ success: true, data: null });
   });
 
   // Test POST /api/users (Validation error case)
@@ -59,13 +59,14 @@ describe('Tennis sensor tests', () => {
     const response = await request(app)
       .post('/api/sensors/tennis')
       .send({
+        type: "Tennis",
+        id: 2,
         peopleDetected: true,
         lastUpdated: "2026/10/02 12:23:54 AM", // bad format
         pickleballNetStatus: "locked"
       });
 
     expect(response.status).toBe(400);
-    console.warn(response.body)
     expect(response.body).toStrictEqual({
       success: false,
       error: {
