@@ -1,6 +1,6 @@
-import styles from './Tennis.module.css'
+import styles from './TennisPickleball.module.css'
 
-export default function Tennis() {
+export default function TennisPickleball() {
   return (
     <>
       <p className={styles.p}>this is the tennis page</p>

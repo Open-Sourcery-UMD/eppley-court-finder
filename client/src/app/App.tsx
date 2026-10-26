@@ -17,10 +17,10 @@ export default function App() {
       <section className={styles.headerLinks}>
         <Link to='/'><p>Home</p></Link>
         <Link to='/badminton'><p>Badminton</p></Link>
-        <Link to='/tennis'><p>Tennis</p></Link>
+        <Link to='/tennis-pickleball'><p>TennisPickleball</p></Link>
       </section>
 
-      <h1>you are in the page:</h1>
+      <h1>Eppley Court Finder</h1>
       <main>
         <Outlet />
       </main>
