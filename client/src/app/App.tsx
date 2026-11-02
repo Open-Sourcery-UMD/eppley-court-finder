@@ -1,5 +1,6 @@
 import styles from './App.module.css'
 import { Link, Outlet } from 'react-router'
+import { useLocation } from 'react-router';
 
 /*
   This 'encloses' all of the pages in the site.
@@ -10,16 +11,19 @@ import { Link, Outlet } from 'react-router'
 */
 
 export default function App() {
+  const location = useLocation();
   return (
     <>
-      <p>hi i am the page header nice 2 meet u</p>
-
-      <section className={styles.headerLinks}>
-        <Link to='/'><p>Home</p></Link>
-        <Link to='/badminton'><p>Badminton</p></Link>
-        <Link to='/tennis-pickleball'><p>TennisPickleball</p></Link>
-      </section>
-
+      
+      {location.pathname !== '/' &&
+        <section className={styles.headerLinks}>
+          <Link to='/'><p>Home</p></Link>
+          <Link to='/badminton'><p>Badminton</p></Link>
+          <Link to='/tennis-pickleball'><p>Tennis/pickleball</p></Link>
+          <Link to='/faq'><p>FAQ</p></Link>
+        </section>
+      }
+      
       <h1>Eppley Court Finder</h1>
       <main>
         <Outlet />

@@ -3,6 +3,7 @@ import App from "./app/App"
 import Home from "./app/features/home/Home"
 import TennisPickleball from "./app/features/tennis-pickleball/TennisPickleball"
 import Badminton from "./app/features/badminton/Badminton"
+import Faq from "./app/features/faq/Faq"
 import NotFound from "./app/features/not-found/NotFound"
 
 export default createBrowserRouter([
@@ -21,6 +22,10 @@ export default createBrowserRouter([
       {
         path: "badminton",
         Component: Badminton
+      },
+      {
+        path: "faq",
+        Component: Faq
       },
     ],
     ErrorBoundary: NotFound
