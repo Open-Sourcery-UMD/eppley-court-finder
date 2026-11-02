@@ -4,7 +4,9 @@
 
 // TODO: Make the actual tests
 
-import "vitest"
+import { describe, it, expect } from "vitest"
+import request from "supertest"
+import app from "../../server.js"
 
 // Mocked sensors
 
@@ -12,31 +14,69 @@ import "vitest"
 
 /** Sensor on [T]ennis court [2], [N]orth side */
 const sensorT2N = {
+  type: "Tennis",
+  id: 2,
   peopleDetected: true, // From IR sensor or manual button, etc.
-  lastUpdated: "2026-10-03T00:23:54",
+  lastUpdated: "2026-10-03T00:23:54Z",
   pickleballNetStatus: "locked" // From camera, probably?
 }
 
 /** Sensor on [T]ennis court [2], [S]outh side */
 const sensorT2S = {
   peopleDetected: false,
-  lastUpdated: "2026-10-03T01:06:20",
+  lastUpdated: "2026-10-03T01:06:20Z",
   pickleballNetStatus: "unlocked"
 }
 
 /** Sensor on [T]ennis court [3], [N]orth side */
 const sensorT3N = {
   peopleDetected: true, // Court is being used for tennis
-  lastUpdated: "2026-10-03T01:07:45",
+  lastUpdated: "2026-10-03T01:07:45Z",
   pickleballNetStatus: "locked" // Both sub-courts locked (tennis-only court)
 }
 
 /** Sensor on [T]ennis court [3], [S]outh side */
 const sensorT3S = {
   peopleDetected: true, // Court is being used for tennis
-  lastUpdated: "2026-10-03T01:07:45",
+  lastUpdated: "2026-10-03T01:07:45Z",
   pickleballNetStatus: "locked"
 }
+
+describe('Tennis sensor tests', () => {
+
+  // Test POST /api/sensors/tennis
+  it('should return null with a 200 status', async () => {
+    const response = await request(app)
+      .post('/api/sensors/tennis')
+      .send(sensorT2N);
+
+    expect(response.status).toBe(200);
+    expect(response.body).toStrictEqual({ success: true, data: null });
+  });
+
+  // Test POST /api/users (Validation error case)
+  it('should return a 400 status if lastUpdated is not in ISO format', async () => {
+    const response = await request(app)
+      .post('/api/sensors/tennis')
+      .send({
+        type: "Tennis",
+        id: 2,
+        peopleDetected: true,
+        lastUpdated: "2026/10/02 12:23:54 AM", // bad format
+        pickleballNetStatus: "locked"
+      });
+
+    expect(response.status).toBe(400);
+    expect(response.body).toStrictEqual({
+      success: false,
+      error: {
+        code: "INVALID_INPUT",
+        message: "Invalid format"
+      }
+    });
+  });
+
+});
 
 // Badminton
 

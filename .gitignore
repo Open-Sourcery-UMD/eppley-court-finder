@@ -14,6 +14,10 @@ build
 *.local
 *.tsbuildinfo
 
+# Python
+.venv
+__pycache__
+
 # local env files — real secrets (DB URIs, JWT secrets, SMTP passwords) live
 # in these; never commit them. See backend/.env.example / frontend/.env.example
 # for the variable names teammates need to fill in locally.
